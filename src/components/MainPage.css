@@ -1,0 +1,724 @@
+@import url('https://fonts.googleapis.com/css2?family=BBH+Sans+Hegarty&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+.main-header {
+    padding: 20px 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: #105070;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-header h1 {
+    font-size: 1.5rem;
+}
+
+.main-header h1 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 25px;
+    transition: background-color 0.3s;
+}
+
+.user-profile:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.profile-pic {
+    width: 35px;
+    height: 35px;
+    background-color: #b0b0b0;
+    border-radius: 50%;
+    border: 2px solid #f0f0f0;
+}
+
+.profile-name {
+    color: #f0f0f0;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.dropdown-arrow {
+    border: solid #f0f0f0;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+    transform: rotate(45deg);
+    margin-left: 3px;
+    transition: transform 0.3s;
+}
+
+.user-profile.open .dropdown-arrow {
+    transform: rotate(-135deg);
+}
+
+.content {
+    padding: 10px 40px 30px 40px;
+}
+
+.gallery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 25px;
+}
+
+.gallery-title h2 {
+    font-size: 1.8rem;
+    margin-bottom: 5px;
+}
+
+.gallery-title p {
+    font-size: 1rem;
+    color: #b0b0b0;
+}
+
+.edit-button {
+    background-color: #D9D9D9;
+    color: #1a1a1a;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+
+.edit-button:hover {
+    background-color: #f0f0f0;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+}
+
+.memory-card {
+    background-color: #b0b0b0;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.memory-card:hover {
+    transform: scale(1.03);
+    box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background-color: #ffffff;
+    color: #1a1a1a;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2.5rem;
+    color: #aaa;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: #1a1a1a;
+}
+
+.modal-image-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: #D9D9D9;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.modal-text h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.modal-text p {
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.btn-remove-card {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 28px;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+    opacity: 0;
+    transform: scale(0.5);
+    pointer-events: none;
+}
+
+.add-card-button {
+    background-color: transparent;
+    border: 3px dashed #b0b0b0;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #b0b0b0;
+    font-size: 4rem;
+    transition: all 0.2s ease;
+    display: none;
+}
+
+.add-card-button:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    border-color: white;
+}
+
+body.edit-mode .btn-remove-card {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+}
+
+body.edit-mode .add-card-button {
+    display: flex;
+}
+
+.tribute-section {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 40px;
+    margin-top: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tribute-image {
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+    background-color: #b0b0b0;
+    border-radius: 10%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.tribute-text h2 {
+    font-size: 1.8rem;
+    color: #f1d7e8;
+    margin-bottom: 15px;
+}
+
+.tribute-text p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #e0e0e0;
+    margin-bottom: 15px;
+}
+
+.tribute-text p.signature {
+    font-style: italic;
+    text-align: right;
+    color: #b0b0b0;
+}
+
+body.logged-in-item {
+    display: none !important;
+}
+
+.login-prompt.logged-out-item {
+    display: block;
+    text-align: center;
+    padding: 60px 30px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    margin-top: 165px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.login-prompt h2 {
+    font-size: 1.8rem;
+    color: #f1d7e8;
+    margin-bottom: 15px;
+}
+
+.login-prompt p {
+    font-size: 1.1rem;
+    color: #e0e0e0;
+    margin-bottom: 25px;
+}
+
+.btn-login-prompt {
+    background-color: #fa83ce;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.btn-login-prompt:hover {
+    transform: scale(1.05);
+}
+
+body.logged-in .logged-in-item {
+    display:  block !important;
+}
+
+body.logged-in .gallery-header {display: flex !important;}
+body.logged-in .gallery-grid {display: grid !important;}
+body.logged-in .edit-button {display: block !important;}
+body.logged-in .tribute-section {display: flex !important;}
+
+body.logged-in .logged-out-item {
+    display: none !important;
+}
+
+.modal-content.login-modal {
+    max-width: 450px;
+    text-align: center;
+}
+
+.login-modal h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.login-modal p {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.google-login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    padding: 12px;
+    background-color: #4285F4;
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.google-login-btn:hover {
+    background-color: #357ae8;
+}
+
+.google-login-btn svg {
+    background-color: white;
+    border-radius: 3px;
+    padding: 2px;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 70px;
+    right: 40px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 101;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: all 0.2s ease-out;
+}
+
+.user-dropdown.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.dropdown-btn {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    text-align: left;
+    color: #1a1a1a;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.dropdown-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.user-profile.open .dropdown-arrow {
+    transform: rotate(-135deg);
+    margin-top: 5px;
+}
+
+.community-tributes {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tribute-form-section {
+    max-width: 800px;
+    margin: 0 auto 40px auto;
+    text-align: center;
+}
+
+.tribute-form-section h2 {
+    font-size: 1.8rem;
+    color: #f1d7e8;
+    margin-bottom: 10px;
+}
+
+.tribute-form-section p {
+    font-size: 1.1rem;
+    color: #e0e0e0;
+    margin-bottom: 30px;
+}
+
+#tributeForm .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+#tributeForm label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: #f0f0f0;
+}
+
+#tributeForm input[type="text"],
+#tributeForm textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #b0b0b0;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+}
+
+#tributeForm textarea {
+    resize: vertical;
+}
+
+.btn-submit-tribute {
+    background-color: #f183ce;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.btn-submit-tribute:hover {
+    transform: scale(1.05);
+    background-color: #f1d7e8;
+    color: #105070;
+}
+
+.tribute-mural-section {
+    max-width: 1000px;
+    margin: 40px auto 0 auto;
+}
+
+.tribute-mural-section h3 {
+    font-size: 1.5rem;
+    color: #f0f0f0;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tribute-mural {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.tribute-post {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.tribute-post .post-message {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #e0e0e0;
+    font-style: italic;
+    margin-bottom: 15px;
+}
+
+.tribute-post .post-author {
+    display: block;
+    text-align: right;
+    font-weight: 700;
+    color: #f1d7e8;
+}
+
+#tributeForm input[type="file"] {
+    display: none;
+}
+
+.file-input-label {
+    display: block;
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid #b0b0b0;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #f0f0f0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.file-input-label span {
+    color: #b0b0b0;
+}
+
+.file-input-label:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.tribute-post .post-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.tribute-post.no-image {
+    justify-content: center;
+}
+
+.login-modal .signup-view {
+    display: none;
+}
+.login-modal.show-signup .signup-view {
+    display: block;
+}
+.login-modal.show-signup .login-view {
+    display: none;
+}
+
+.form-group-modal {
+    margin-bottom: 15px;
+    text-align: left;
+}
+.form-group-modal label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #333;
+}
+.form-group-modal input[type="text"],
+.form-group-modal input[type="email"],
+.form-group-modal input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    color: #1a1a1a;
+}
+.form-group-modal input[type="password"] {
+    letter-spacing: 0.1rem;
+}
+
+.btn-submit.auth-btn {
+    background-color: #fa83ce;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+.btn-submit.auth-btn:hover {
+    transform: scale(1.02);
+}
+
+.divider {
+    text-align: center;
+    color: #999;
+    margin: 15px 0;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.modal-toggle-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.95rem;
+    color: #555;
+}
+.modal-toggle-link span {
+    color: #fa83ce;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .main-header,
+    .content {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    .user-profile .profile-name {
+        display: none;
+    }
+    .tribute-section {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+        text-align: center;
+    }
+    .tribute-image {
+        width: 150px;
+        height: 150px;
+    }
+    .tribute-text p.signature {
+        text-align: center;
+    }
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    .tribute-mural {
+        grid-template-columns: 1fr;
+    }
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-header,
+    .content {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .main-header {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+    .tribute-text h2,
+    .gallery-title h2,
+    .tribute-form-section h2,
+    .login-prompt h2 {
+        font-size: 1.5rem;
+    }
+    .gallery-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .google-login-btn {
+        gap: 10px;
+        font-size: 0.9rem;
+    }
+    .google-login-btn span {
+        display: none;
+    }
+}
