@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import './MainPage.css'
-import { Link } from "react-router-dom";
+import { data, Link } from "react-router-dom";
 
 function MainPage() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -22,13 +22,22 @@ function MainPage() {
     useEffect(() => {
         const searchHomenagens = () => {
             fetch('http://127.0.0.1:8000/homenagens/')
-            .then(response => response.json())
-            .then(data => {
-                setHomenagens(data);
-            })
-            .catch(error => console.error("Erro ao buscar homenagens:", error));
+                .then(response => response.json())
+                .then(data => {
+                    setHomenagens(data);
+                })
+                .catch(error => console.error("Erro ao buscar homenagens:", error));
         };
+
+        const searchMemory = () => {
+            fetch('http://127.0.0.1:8000/memorias/')
+                .then(response => response.json())
+                .then(data => setMemoryCards(data))
+                .catch(error => console.error("Erro ao buscar memorias:", error));
+        };
+
         searchHomenagens();
+        searchMemory();
     }, []);
 
     const handleLogin = () => {
