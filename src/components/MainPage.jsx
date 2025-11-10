@@ -15,16 +15,7 @@ function MainPage() {
 
     const [homenagens, setHomenagens] = useState([]);
 
-    const [memoryCards, setMemoryCards] = useState([
-        { id: 1, title: "O Dia do Parque", description: "Essa foi a tarde que passamos rindo..." },
-        { id: 2, title: "Show Inesquecível", description: "Aquele show que esperamos..." },
-        { id: 3, title: "Formatura", description: "O dia da formatura..." },
-        { id: 4, title: "Viagem para a Praia", description: "Nossa primeira viagem..." },
-        { id: 5, title: "Maratona de Filmes", description: "Aquela noite em que decidimos..." },
-        { id: 6, title: "Aniversário Surpresa", description: "A festa surpresa que você organizou..." },
-        { id: 7, title: "Café da Tarde", description: "Uma foto aleatória..." },
-        { id: 8, title: "Aquele Pôr do Sol", description: "Simplesmente um pôr do sol..." }
-    ]);
+    const [memoryCards, setMemoryCards] = useState([]);
 
     const [selectedCard, setSelectedCard] = useState(null);
 
