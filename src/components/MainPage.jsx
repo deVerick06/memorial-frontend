@@ -13,6 +13,8 @@ function MainPage() {
 
     const [isAddMemoryModalOpen, setIsAddMemoryModalOpen] = useState(false);
 
+    const [homenagens, setHomenagens] = useState([]);
+
     const [memoryCards, setMemoryCards] = useState([
         { id: 1, title: "O Dia do Parque", description: "Essa foi a tarde que passamos rindo..." },
         { id: 2, title: "Show Inesquecível", description: "Aquele show que esperamos..." },
@@ -25,6 +27,18 @@ function MainPage() {
     ]);
 
     const [selectedCard, setSelectedCard] = useState(null);
+
+    useEffect(() => {
+        const searchHomenagens = () => {
+            fetch('http://127.0.0.1:8000/homenagens/')
+            .then(response => response.json())
+            .then(data => {
+                setHomenagens(data);
+            })
+            .catch(error => console.error("Erro ao buscar homenagens:", error));
+        };
+        searchHomenagens();
+    }, []);
 
     const handleLogin = () => {
         setIsLoggedIn(true);
@@ -236,10 +250,12 @@ function MainPage() {
                             <section className="tribute-mural-section">
                                 <h3>Mural de Homenagens</h3>
                                 <div className="tribute-mural" id="tributeMural">
-                                    <div className="tribute-post no-image">
-                                        <p className="post-message">"Lulu sempre será lembrada por sua alegria e sorriso contagiante. Ela fazia todos ao seu redor sorrirem. Sentiremos saudades."</p>
-                                        <span className="post-author">- Erick</span>
-                                    </div>
+                                    {homenagens.map(homenagem => (
+                                        <div className="tribute-post no-image" key={homenagem.id}>
+                                            <p className="post-message">"{homenagem.message}"</p>
+                                            <span className="post-author">- {homenagem.name}</span>
+                                        </div>
+                                    ))}
                                 </div>
                             </section>
                         </div>
