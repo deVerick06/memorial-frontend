@@ -141,8 +141,28 @@ function MainPage() {
         const name = form.tributeName.value;
         const message = form.tributeMessage.value;
 
-        alert(`Obrigado, ${name}! Sua homenagem foi recebida.`);
-        form.reset();
+        const newHomenagem = {
+            nome: name,
+            mensagem: message
+        };
+
+        fetch('http://127.0.0.1:8000/homenagens/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newHomenagem),
+        })
+        .then(response => response.json())
+        .then(createdHomenagem => {
+            setHomenagens(homenagensAtuais => [createdHomenagem, ...homenagensAtuais]);
+            alert(`Obrigado, ${name}! Sua homenagem foi recebida.`);
+            form.reset();
+        })
+        .catch(error => {
+            console.error("Erro ao criar homenagem:", error);
+            alert("Ops, algo deu errado. Tente novamente.")
+        })
     };
 
     return (
@@ -252,8 +272,8 @@ function MainPage() {
                                 <div className="tribute-mural" id="tributeMural">
                                     {homenagens.map(homenagem => (
                                         <div className="tribute-post no-image" key={homenagem.id}>
-                                            <p className="post-message">"{homenagem.message}"</p>
-                                            <span className="post-author">- {homenagem.name}</span>
+                                            <p className="post-message">"{homenagem.mensagem}"</p>
+                                            <span className="post-author">- {homenagem.nome}</span>
                                         </div>
                                     ))}
                                 </div>
