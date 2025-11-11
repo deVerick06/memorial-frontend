@@ -27,7 +27,11 @@ function MainPage() {
         }
 
         const searchHomenagens = () => {
-            fetch('http://127.0.0.1:8000/homenagens/')
+            fetch('http://127.0.0.1:8000/homenagens/', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
                 .then(response => response.json())
                 .then(data => {
                     setHomenagens(data);
@@ -36,7 +40,11 @@ function MainPage() {
         };
 
         const searchMemory = () => {
-            fetch('http://127.0.0.1:8000/memorias/')
+            fetch('http://127.0.0.1:8000/memorias/', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
                 .then(response => response.json())
                 .then(data => setMemoryCards(data))
                 .catch(error => console.error("Erro ao buscar memorias:", error));
@@ -154,10 +162,14 @@ function MainPage() {
             title: title,
             description: description
         };
+
+        const token = localStorage.getItem('token');
+
         fetch('http://127.0.0.1:8000/memorias/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(newMemory),
         })
@@ -222,10 +234,13 @@ function MainPage() {
             mensagem: message
         };
 
+        const token = localStorage.getItem('token');
+
         fetch('http://127.0.0.1:8000/homenagens/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(newHomenagem),
         })
