@@ -151,38 +151,63 @@ function MainPage() {
         const form = event.target;
         const title = form.newMemoryTitle.value;
         const description = form.newMemoryDescription.value;
-        //const file = form.newMemoryImage.files[0];
+        const file = form.newMemoryImage.files[0];
+        const token = localStorage.getItem('token');
 
         if (!title || !description) {
             alert("Título e Descrição são obrigatórios.");
             return;
         }
 
-        const newMemory = {
-            title: title,
-            description: description
+        const saveMemoryData = (imageUrl) => {
+            const newMemory = {
+                title: title,
+                description: description,
+                image_url: imageUrl
+            };
+
+            fetch('http://127.0.0.1:8000/memorias/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(newMemory),
+            })
+            .then(response => response.json())
+            .then(memoryCreated => {
+                setMemoryCards(cardsAtuais => [...cardsAtuais, memoryCreated]);
+                closeAddMemoryModal();
+                form.reset();
+            })
+            .catch(error => {
+                console.error("Erro ao criar memoria:", error);
+                alert("Ops, algo deu errado ao salvar sua memoria");
+            });
         };
 
-        const token = localStorage.getItem('token');
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
 
-        fetch('http://127.0.0.1:8000/memorias/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(newMemory),
-        })
-        .then(response => response.json())
-        .then(memoryCreated => {
-            setMemoryCards(cardsAtuais => [...cardsAtuais, memoryCreated]);
-            closeAddMemoryModal();
-            form.reset();
-        })
-        .catch(error => {
-            console.error("Erro ao criar memoria:", error);
-            alert("Ops, algo deu errado ao salvar sua memoria");
-        });
+            fetch('http://127.0.0.1:8000/upload-image/', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(uploadData => {
+                saveMemoryData(uploadData.image_url);
+            })
+            .catch(error => {
+                console.error("Erro ao fazer upload da imagem:", error);
+                alert("Ops, algo deu errado com o upload da sua foto.");
+            });
+        } else {
+            saveMemoryData(null);
+        }
     };
 
     const handleSignup = (event) => {
@@ -307,12 +332,12 @@ function MainPage() {
                                     key={card.id}
                                     onClick={() => openMemoryModal(card)}
                                     style={{
-                                        backgroundImage: card.imageUrl ? `url(${card.imageUrl})` : 'none',
+                                        backgroundImage: card.image_url ? `url(${card.image_url})` : 'none',
                                         backgroundSize: 'cover',
                                         backgroundPosition: 'center'
                                     }}
                                 >
-                                    {!card.imageUrl && (
+                                    {!card.image_url && (
                                         <div style={{ padding: '10px', color: 'black' }}>
                                             <h4 style={{ marginBottom: '5px' }}>{card.title}</h4>
                                             <p style={{ fontSize: '0.8em' }}>{card.description.substring(0, 30)}...</p>
@@ -378,9 +403,9 @@ function MainPage() {
                 <div className="modal-content">
                     <button className="modal-close" onClick={closeMemoryModal}>&times;</button>
                     <div className="modal-image-placeholder">
-                        {selectedCard?.imageUrl && (
+                        {selectedCard?.image_url && (
                             <img 
-                                src={selectedCard.imageUrl} 
+                                src={selectedCard.image_url} 
                                 alt={selectedCard.title} 
                                 style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '5px' }} 
                             />
