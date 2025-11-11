@@ -253,32 +253,57 @@ function MainPage() {
         const form = event.target;
         const name = form.tributeName.value;
         const message = form.tributeMessage.value;
-
-        const newHomenagem = {
-            nome: name,
-            mensagem: message
-        };
-
+        const file = form.tributeImage.files[0];
         const token = localStorage.getItem('token');
 
-        fetch('http://127.0.0.1:8000/homenagens/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(newHomenagem),
-        })
-        .then(response => response.json())
-        .then(createdHomenagem => {
-            setHomenagens(homenagensAtuais => [createdHomenagem, ...homenagensAtuais]);
-            alert(`Obrigado, ${name}! Sua homenagem foi recebida.`);
-            form.reset();
-        })
-        .catch(error => {
-            console.error("Erro ao criar homenagem:", error);
-            alert("Ops, algo deu errado. Tente novamente.")
-        })
+        const saveTributeData = (imageUrl) => {
+            const newHomenagem = {
+                nome: name,
+                mensagem: message,
+                image_url: imageUrl
+            };
+
+            fetch('http://127.0.0.1:8000/homenagens/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(newHomenagem),
+            })
+            .then(response => response.json())
+            .then(createdHomenagem => {
+                setHomenagens(homenagensAtuais => [createdHomenagem, ...homenagensAtuais]);
+                alert(`Obrigado, ${name}! Sua homenagem foi recebida.`);
+                form.reset();
+            })
+            .catch(error => {
+                console.error("Erro ao criar homenagem:", error);
+                alert("Ops, algo deu errado. Tente novamente.")
+            });
+        };
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch('http://127.0.0.1:8000/upload-image/', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(uploadData => {
+                saveTributeData(uploadData.image_url);
+            })
+            .catch(error => {
+                console.error("Erro ao fazer upload da imagem:", error);
+                alert("Ops, algo deu errado com o upload da sua foto.");
+            });
+        } else {
+            saveTributeData(null);
+        }
     };
 
     return (
