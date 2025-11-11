@@ -20,6 +20,12 @@ function MainPage() {
     const [selectedCard, setSelectedCard] = useState(null);
 
     useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            setIsLoggedIn(true);
+            document.body.classList.add('logged-in');
+        }
+
         const searchHomenagens = () => {
             fetch('http://127.0.0.1:8000/homenagens/')
                 .then(response => response.json())
