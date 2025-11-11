@@ -102,37 +102,37 @@ function MainPage() {
 
     const handleAddMemorySubmit = (event) => {
         event.preventDefault();
-
         const form = event.target;
         const title = form.newMemoryTitle.value;
         const description = form.newMemoryDescription.value;
-        const file = form.newMemoryImage.files[0];
+        //const file = form.newMemoryImage.files[0];
 
         if (!title || !description) {
             alert("Título e Descrição são obrigatórios.");
             return;
         }
 
-        const addNewCard = (imageUrl = null) => {
-            const newCard = {
-                id: Date.now(),
-                title: title,
-                description: description,
-                imageUrl: imageUrl,
-            };
-            setMemoryCards(currentCards => [...currentCards, newCard]);
+        const newMemory = {
+            title: title,
+            description: description
+        };
+        fetch('http://127.0.0.1:8000/memorias/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newMemory),
+        })
+        .then(response => response.json())
+        .then(memoryCreated => {
+            setMemoryCards(cardsAtuais => [...cardsAtuais, memoryCreated]);
             closeAddMemoryModal();
             form.reset();
-        };
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                addNewCard(e.target.result);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            addNewCard(null);
-        }
+        })
+        .catch(error => {
+            console.error("Erro ao criar memoria:", error);
+            alert("Ops, algo deu errado ao salvar sua memoria");
+        });
     };
 
     const handleTributeSubmit = (event) => {
