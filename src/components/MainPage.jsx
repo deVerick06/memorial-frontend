@@ -383,7 +383,7 @@ function MainPage() {
                     <button className="modal-close" id="loginModalClose" onClick={closeLoginModal}>&times;</button>
                     <div className="login-view">
                         <h3>Acesse o Memorial</h3>
-                        <form id="loginForm" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+                        <form id="loginForm" onSubmit={handleLogin}>
                             <div className="form-group-modal">
                                 <label htmlFor="loginEmail">Email</label>
                                 <input type="email" id="loginEmail" placeholder="seuemail@exemplo.com" required />
