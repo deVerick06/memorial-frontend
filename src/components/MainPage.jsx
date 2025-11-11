@@ -135,6 +135,44 @@ function MainPage() {
         });
     };
 
+    const handleSignup = (event) => {
+        event.preventDefault();
+        const form = event.target;
+        const nome = form.signupName.value;
+        const email = form.signupEmail.value;
+        const password = form.signupPassword.value;
+
+        const newUser = {
+            nome: nome,
+            email: email,
+            password: password
+        }
+
+        fetch('http://127.0.0.1:8000/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newUser),
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.detail) });
+            }
+            return response.json();
+        })
+        .then(userCreated => {
+            alert(`Usuário ${userCreated.nome} criado com sucesso! Por favor, faça o login.`);
+            form.reset();
+            setShowSignup(false);
+        })
+        .catch(error => {
+            console.error("Erro ao criar usuário:", error);
+            alert(`Erro ao cadastrar: ${error.message}`);
+        });
+    };
+
+
     const handleTributeSubmit = (event) => {
         event.preventDefault();
         const form = event.target;
@@ -335,7 +373,7 @@ function MainPage() {
                     </div>
                     <div className="signup-view">
                         <h3>Crie sua Conta</h3>
-                        <form id="signupForm" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+                        <form id="signupForm" onSubmit={handleSignup}>
                             <div className="form-group-modal">
                                 <label htmlFor="signupName">Seu Nome</label>
                                 <input type="text" id="signupName" placeholder="Como você quer ser chamado" required />
