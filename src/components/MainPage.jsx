@@ -40,12 +40,44 @@ function MainPage() {
         searchMemory();
     }, []);
 
-    const handleLogin = () => {
-        setIsLoggedIn(true);
-        document.body.classList.add('logged-in');
-        setIsLoginModalOpen(false);
+    const handleLogin = (event) => {
+        event.preventDefault();
+        const form = event.target;
+        const email = form.loginEmail.value;
+        const password = form.loginPassword.value;
+
+        const formData = new URLSearchParams();
+        formData.append('username', email);
+        formData.append('password', password);
+
+        fetch('http://127.0.0.1:8000/token', {
+            method: 'POST',
+            headers: {
+
+            },
+            body: formData,
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.detail) });
+            }
+            return response.json();
+        })
+        .then(data => {
+            localStorage.setItem('token', data.access_token);
+
+            setIsLoggedIn(true);
+            document.body.classList.add('logged-in');
+            setIsLoginModalOpen(false);
+            form.reset();
+        })
+        .catch(error => {
+            console.error("Erro ao fazer login:", error);
+            alert(`Erro ao logar: ${error.message}`);
+        })
     };
     const handleLogout = () => {
+        localStorage.removeItem('token');
         setIsLoggedIn(false);
         document.body.classList.remove('logged-in');
         document.body.classList.remove('edit-mode');
