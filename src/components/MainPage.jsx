@@ -559,7 +559,18 @@ function MainPage() {
                                         <div
                                             className={`tribute-post ${homenagem.image_url ? '' : 'no-image'}`}
                                             key={homenagem.id}
+                                            style={{ position: 'relative' }}
                                         >
+                                            <button
+                                                className="btn-remove-card"
+                                                onClick={(e) => handleTributeDelete(e, homenagem.id)}
+                                                style={{
+                                                    top: '10px',
+                                                    right: '10px'
+                                                }}
+                                            >
+                                                &times;
+                                            </button>
                                             {homenagem.image_url && (
                                                 <img 
                                                     src={homenagem.image_url} 
