@@ -23,6 +23,8 @@ function MainPage() {
     const [editMemoryTitle, setEditMemoryTitle] = useState("");
     const [editMemoryDescription, setEditMemoryDescription] = useState("");
 
+    const [currentUser, setCurrentUser] = useState(null);
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         let isTokenInvalid = false;
@@ -37,6 +39,8 @@ function MainPage() {
         if (token) {
             setIsLoggedIn(true);
             document.body.classList.add('logged-in');
+
+            fetchUserData(token)
 
             fetch('http://127.0.0.1:8000/homenagens/', {
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -102,7 +106,7 @@ function MainPage() {
         })
         .then(data => {
             localStorage.setItem('token', data.access_token);
-
+            fetchUserData(data.access_token);
             setIsLoggedIn(true);
             document.body.classList.add('logged-in');
             setIsLoginModalOpen(false);
@@ -116,10 +120,28 @@ function MainPage() {
     const handleLogout = () => {
         localStorage.removeItem('token');
         setIsLoggedIn(false);
+        setCurrentUser(null);
         document.body.classList.remove('logged-in');
         document.body.classList.remove('edit-mode');
         closeUserDropdown();
         setIsEditing(false);
+    };
+    const fetchUserData = (token) => {
+        fetch('http://127.0.0.1:8000/users/me', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Falha ao buscar dados do usuário.");
+            }
+            return response.json();
+        })
+        .then(userData => {
+            setCurrentUser(userData);
+        })
+        .catch(error => {
+            console.error(error.message);
+        });
     };
     const openLoginModal = () => setIsLoginModalOpen(true);
     const closeLoginModal = () => setIsLoginModalOpen(false);
@@ -390,7 +412,9 @@ function MainPage() {
                 <h1><Link to="/lembrancas">Lembranças</Link></h1>
                 <div className={`user-profile ${isUserDropdownOpen ? 'open' : ''}`} id="userProfileButton" onClick={isLoggedIn ? toggleUserDropdown : openLoginModal}>
                     <div className="profile-pic"></div>
-                    <span className="profile-name">{isLoggedIn ? "Lulu" : "Visitante"}</span>
+                    <span className="profile-name">
+                        {isLoggedIn ? (currentUser ? currentUser.nome : "...") : "Visitante"}
+                    </span>
                     <span className="dropdown-arrow"></span>
                 </div>
                 <div className={`user-dropdown ${isUserDropdownOpen ? 'open' : ''}`} id="userDropdown">
