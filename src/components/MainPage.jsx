@@ -143,7 +143,34 @@ function MainPage() {
 
     const removeCard = (event, cardIdToRemove) => {
         event.stopPropagation();
-        setMemoryCards(currentCards => currentCards.filter(card => card.id !== cardIdToRemove));
+        const token = localStorage.getItem('token');
+
+        if (!window.confirm("Tem certeza que deseja apagar essa lembrança?")) {
+            return;
+        }
+
+        fetch(`http://127.0.0.1:8000/memorias/${cardIdToRemove}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (response.status == 204) {
+                setMemoryCards(currentCards => 
+                    currentCards.filter(card => card.id !== cardIdToRemove)
+                );
+            } else if (response.status == 401) {
+                alert("Sua sessão expirou. Faça login novamente.");
+                handleLogout();
+            } else {
+                alert("Não foi possivel apagar a lembrança.");
+            }
+        })
+        .catch(error => {
+            console.error("Erro ao deletar a memória:", error);
+            alert("Ops, algo deu errado.");
+        })
     };
 
     const handleAddMemorySubmit = (event) => {
