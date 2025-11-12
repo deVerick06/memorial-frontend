@@ -709,6 +709,39 @@ function MainPage() {
                     </form>
                 </div>
             </div>
+            <div
+                className={`modal-overlay ${isHomenagemModalOpen ? 'active' : ''}`}
+                onClick={(e) => { if (e.target === e.currentTarget) setIsHomenagemModalOpen(false); }}
+            >
+                <div className="modal-content">
+                    <button className="modal-close" onClick={() => setIsHomenagemModalOpen(false)}>&times;</button>
+                    <h3>Editar Homenagem</h3>
+
+                    <form id="editHomenagemForm" onSubmit={handleHomenagemUpdateSubmit}>
+                        <div className="form-group-modal">
+                            <label htmlFor="editHomenagemName">Nome</label>
+                            <input 
+                                type="text" 
+                                id="editHomenagemName"
+                                required
+                                value={editHomenagemName}
+                                onChange={(e) => setEditHomenagemName(e.target.value)}
+                            />
+                        </div>
+                        <div className="form-group-modal">
+                            <label htmlFor="editHomenagemMessage">Mensagem</label>
+                            <textarea 
+                                id="editHomenagemMessage"
+                                rows="4"
+                                required
+                                value={editHomenagemMessage}
+                                onChange={(e) => setEditHomenagemMessage(e.target.value)}
+                            />
+                        </div>
+                        <button type="submit" className="btn-submit auth-btn">Salvar Alterações</button>
+                    </form>
+                </div>
+            </div>
         </>
     );
 }
