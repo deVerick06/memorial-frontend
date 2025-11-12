@@ -23,6 +23,11 @@ function MainPage() {
     const [editMemoryTitle, setEditMemoryTitle] = useState("");
     const [editMemoryDescription, setEditMemoryDescription] = useState("");
 
+    const [isHomenagemModalOpen, setIsHomenagemModalOpen] = useState(false);
+    const [homenagemToEdit, setHomenagemToEdit] = useState(null);
+    const [editHomenagemName, setEditHomenagemName] = useState("");
+    const [editHomenagemMessage, setEditHomenagemMessage] = useState("");
+
     const [currentUser, setCurrentUser] = useState(null);
 
     useEffect(() => {
