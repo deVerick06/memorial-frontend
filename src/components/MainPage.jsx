@@ -135,7 +135,12 @@ function MainPage() {
     const closeUserDropdown = () => setIsUserDropdownOpen(false);
 
     const openAddMemoryModal = () => setIsAddMemoryModalOpen(true);
-    const closeAddMemoryModal = () => setIsAddMemoryModalOpen(false)
+    const closeAddMemoryModal = () => {
+        setIsAddMemoryModalOpen(false);
+        setCardToEdit(null);
+        setEditMemoryTitle("");
+        setEditMemoryDescription("");
+    }
 
     const toggleEditMode = () => {
         if (!isLoggedIn) return;
@@ -199,8 +204,8 @@ function MainPage() {
     const handleAddMemorySubmit = (event) => {
         event.preventDefault();
         const form = event.target;
-        const title = form.newMemoryTitle.value;
-        const description = form.newMemoryDescription.value;
+        const title = editMemoryTitle;
+        const description = editMemoryDescription;
         const file = form.newMemoryImage.files[0];
         const token = localStorage.getItem('token');
 
@@ -210,29 +215,52 @@ function MainPage() {
         }
 
         const saveMemoryData = (imageUrl) => {
-            const newMemory = {
+
+            let finalImageUrl = imageUrl;
+            if (cardToEdit && !file) {
+                finalImageUrl = cardToEdit.image_url;
+            }
+
+            const memoryData = {
                 title: title,
                 description: description,
-                image_url: imageUrl
+                image_url: finalImageUrl
             };
 
-            fetch('http://127.0.0.1:8000/memorias/', {
-                method: 'POST',
+            let url = 'http://127.0.0.1:8000/memorias/';
+            let method = 'POST';
+
+            if (cardToEdit) {
+                url = `http://127.0.0.1:8000/memorias/${cardToEdit.id}`;
+                method = 'PUT';
+            }
+
+            fetch(url, {
+                method: method,
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(newMemory),
+                body: JSON.stringify(memoryData),
             })
-            .then(response => response.json())
-            .then(memoryCreated => {
-                setMemoryCards(cardsAtuais => [...cardsAtuais, memoryCreated]);
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.detail) });
+                }
+                return response.json();
+            })
+            .then(savedCard => {
+                if (cardToEdit) {
+                    setMemoryCards(cardsAtuais => cardsAtuais.map(card => card.id === savedCard.id ? savedCard : card));
+                } else {
+                    setMemoryCards(cardsAtuais => [...cardsAtuais, savedCard]);
+                }
                 closeAddMemoryModal();
                 form.reset();
             })
             .catch(error => {
-                console.error("Erro ao criar memoria:", error);
-                alert("Ops, algo deu errado ao salvar sua memoria");
+                console.error("Erro ao salvar memoria:", error);
+                alert(`Ops, algo deu errado: ${error.message}`);
             });
         };
 
@@ -405,7 +433,16 @@ function MainPage() {
                                 <div 
                                     className="memory-card"
                                     key={card.id}
-                                    onClick={() => openMemoryModal(card)}
+                                    onClick={() => {
+                                        if (isEditing) {
+                                            setCardToEdit(card);
+                                            setEditMemoryTitle(card.title);
+                                            setEditMemoryDescription(card.description);
+                                            openAddMemoryModal();
+                                        } else {
+                                            openMemoryModal();
+                                        }
+                                    }}
                                     style={{
                                         backgroundImage: card.image_url ? `url(${card.image_url})` : 'none',
                                         backgroundSize: 'cover',
@@ -428,7 +465,12 @@ function MainPage() {
                                 </div>
                             ))}
                             {isEditing && memoryCards.length < 8 && (
-                                <div className="add-card-button" onClick={openAddMemoryModal}>
+                                <div className="add-card-button" onClick={() => {
+                                    setCardToEdit(null);
+                                    setEditMemoryTitle("");
+                                    setEditMemoryDescription("");
+                                    openAddMemoryModal();
+                                }}>
                                     <span>+</span>
                                 </div>
                             )}
