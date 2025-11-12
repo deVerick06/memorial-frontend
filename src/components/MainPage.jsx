@@ -440,7 +440,7 @@ function MainPage() {
                                             setEditMemoryDescription(card.description);
                                             openAddMemoryModal();
                                         } else {
-                                            openMemoryModal();
+                                            openMemoryModal(card);
                                         }
                                     }}
                                     style={{
