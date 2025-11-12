@@ -148,6 +148,40 @@ function MainPage() {
             console.error(error.message);
         });
     };
+    const handleHomenagemUpdateSubmit = (event) => {
+        event.preventDefault();
+        const token = localStorage.getItem('token');
+
+        const updatedData = {
+            nome: editHomenagemName,
+            mensagem: editHomenagemMessage,
+            image_url: homenagemToEdit.image_url
+        };
+
+        fetch(`http://127.0.0.1:8000/homenagens/${homenagemToEdit.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(updatedData),
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw new Error(err.detail) });
+            }
+            return response.json();
+        })
+        .then(savedHomenagem => {
+            setHomenagens(homenagensAtuais => homenagensAtuais.map(h => h.id === savedHomenagem.id ? savedHomenagem : h));
+            setIsHomenagemModalOpen(false);
+            setHomenagemToEdit(null);
+        })
+        .catch(error => {
+            console.error("Erro ao atualizar homenagem:", error);
+            alert(`Ops, algo deu errado: ${error.message}`);
+        });
+    };
     const openLoginModal = () => setIsLoginModalOpen(true);
     const closeLoginModal = () => setIsLoginModalOpen(false);
 
