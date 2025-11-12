@@ -223,6 +223,34 @@ function MainPage() {
         })
     };
 
+    const handleTributeDelete = (event, tributeIdToRemove) => {
+        event.stopPropagation();
+        const token = localStorage.getItem('token');
+
+        if (!window.confirm("Tem certeza que quer apagar esta homenagem?")) {
+            return;
+        }
+
+        fetch(`http://127.0.0.1:8000/homenagens/${tributeIdToRemove}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (response.status === 204) {
+                setHomenagens(currentTributes => currentTributes.filter(tribute => tribute.id !== tributeIdToRemove));
+            } else {
+                alert("Não foi possível apagar a homenagem.");
+                console.error("Erro ao deletar:", response.status);
+            }
+        })
+        .catch(error => {
+            console.error("Erro ao deletar homenagem:", error);
+            alert("Ops, algo deu errado.")
+        })
+    }
+
     const handleAddMemorySubmit = (event) => {
         event.preventDefault();
         const form = event.target;
