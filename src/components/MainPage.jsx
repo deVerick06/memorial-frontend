@@ -22,37 +22,44 @@ function MainPage() {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            setIsLoggedIn(true);
-            document.body.classList.add('logged-in');
-        }
-
-        const searchHomenagens = () => {
             fetch('http://127.0.0.1:8000/homenagens/', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: { 'Authorizaton': `Bearer ${token}` }
             })
-                .then(response => response.json())
-                .then(data => {
-                    setHomenagens(data);
-                })
-                .catch(error => console.error("Erro ao buscar homenagens:", error));
-        };
+            .then(response => { 
+                if (!response.ok) {
+                    throw new Error('Falha ao buscar homenagens. Verifique se seu token expirou');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setHomenagens(data);
+            })
+            .catch(error => {
+                console.error("Erro (homenagens):", error.message);
+                setHomenagens([]);
+            });
 
-        const searchMemory = () => {
             fetch('http://127.0.0.1:8000/memorias/', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: { 'Authorization': `Bearer ${token}` }
             })
-                .then(response => response.json())
-                .then(data => setMemoryCards(data))
-                .catch(error => console.error("Erro ao buscar memorias:", error));
-        };
-
-        searchHomenagens();
-        searchMemory();
-    }, []);
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Falha ao buscar memorias. Verifique se seu token expirou');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setMemoryCards(data);
+            })
+            .catch(error => {
+                console.error("Erro (memorias):", error.message);
+                setMemoryCards([]);
+            });
+        } else {
+            setHomenagens([]);
+            setMemoryCards([]);
+        }
+    }, [isLoggedIn]);
 
     const handleLogin = (event) => {
         event.preventDefault();
