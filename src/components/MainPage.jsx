@@ -412,7 +412,17 @@ function MainPage() {
                                 <h3>Mural de Homenagens</h3>
                                 <div className="tribute-mural" id="tributeMural">
                                     {homenagens.map(homenagem => (
-                                        <div className="tribute-post no-image" key={homenagem.id}>
+                                        <div
+                                            className={`tribute-post ${homenagem.image_url ? '' : 'no-image'}`}
+                                            key={homenagem.id}
+                                        >
+                                            {homenagem.image_url && (
+                                                <img 
+                                                    src={homenagem.image_url} 
+                                                    alt={`Homenagem de ${homenagem.nome}`} 
+                                                    className="post-image" 
+                                                />
+                                            )}
                                             <p className="post-message">"{homenagem.mensagem}"</p>
                                             <span className="post-author">- {homenagem.nome}</span>
                                         </div>
