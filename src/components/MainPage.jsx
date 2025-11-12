@@ -21,45 +21,57 @@ function MainPage() {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+        let isTokenInvalid = false;
+
+        const handleAuthError = (error) => {
+            console.error("Erro de autenticação:", error.message);
+            if (!isTokenInvalid) {
+                isTokenInvalid = true;
+                handleLogout();
+            }
+        };
         if (token) {
+            setIsLoggedIn(true);
+            document.body.classList.add('logged-in');
+
             fetch('http://127.0.0.1:8000/homenagens/', {
-                headers: { 'Authorizaton': `Bearer ${token}` }
+                headers: { 'Authorization': `Bearer ${token}` }
             })
             .then(response => { 
-                if (!response.ok) {
-                    throw new Error('Falha ao buscar homenagens. Verifique se seu token expirou');
-                }
+                if (response.status === 401) throw new Error('401 Unauthorized');
+                if (!response.ok) throw new Error('Server Error');
                 return response.json();
             })
-            .then(data => {
-                setHomenagens(data);
-            })
+            .then(data => setHomenagens(data))
             .catch(error => {
-                console.error("Erro (homenagens):", error.message);
                 setHomenagens([]);
+                if (error.message === '401 Unauthorized') {
+                    handleAuthError(error);
+                }
             });
 
             fetch('http://127.0.0.1:8000/memorias/', {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Falha ao buscar memorias. Verifique se seu token expirou');
-                }
+                if (response.status === 401) throw new Error('401 Unauthorized');
+                if (!response.ok) throw new Error('Server error');
                 return response.json();
             })
-            .then(data => {
-                setMemoryCards(data);
-            })
+            .then(data => setMemoryCards(data))
             .catch(error => {
-                console.error("Erro (memorias):", error.message);
                 setMemoryCards([]);
+                if (error.message === '401 Unauthorized') {
+                    handleAuthError(error);
+                }
             });
         } else {
             setHomenagens([]);
             setMemoryCards([]);
+            setIsLoggedIn(false);
+            document.body.classList.remove('logged-in');
         }
-    }, [isLoggedIn]);
+    }, []);
 
     const handleLogin = (event) => {
         event.preventDefault();
