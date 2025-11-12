@@ -19,6 +19,10 @@ function MainPage() {
 
     const [selectedCard, setSelectedCard] = useState(null);
 
+    const [cardToEdit, setCardToEdit] = useState(null);
+    const [editMemoryTitle, setEditMemoryTitle] = useState("");
+    const [editMemoryDescription, setEditMemoryDescription] = useState("");
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         let isTokenInvalid = false;
@@ -560,16 +564,29 @@ function MainPage() {
             >
                 <div className="modal-content">
                     <button className="modal-close" onClick={closeAddMemoryModal}>&times;</button>
-                    <h3>Adicionar Nova Lembrança</h3>
+                    <h3>{cardToEdit ? 'Editar Lembrança' : 'Adicionar Nova Lembrança'}</h3>
 
                     <form id="addMemoryForm" onSubmit={handleAddMemorySubmit}>
                         <div className="form-group-modal">
                             <label htmlFor="newMemoryTitle">Título</label>
-                            <input type="text" id="newMemoryTitle" placeholder="Um título para este momento" required />
+                            <input 
+                                type="text"
+                                id="newMemoryTitle"
+                                placeholder="Um título para este momento"
+                                required
+                                value={editMemoryTitle}
+                                onChange={(e) => setEditMemoryTitle(e.target.value)}
+                            />
                         </div>
                         <div className="form-group-modal">
                             <label htmlFor="newMemoryDescription">Descrição</label>
-                            <textarea id="newMemoryDescription" rows="4" placeholder="Descreva a lembrança..."></textarea>
+                            <textarea
+                                id="newMemoryDescription" 
+                                rows="4" 
+                                placeholder="Descreva a lembrança..."
+                                value={editMemoryDescription}
+                                onChange={(e) => setEditMemoryDescription(e.target.value)}
+                            />
                         </div>
                         <div className="form-group-modal">
                             <label htmlFor="newMemoryImage">Foto (Opcional)</label>
