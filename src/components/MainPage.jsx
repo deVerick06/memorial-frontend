@@ -598,7 +598,15 @@ function MainPage() {
                                         <div
                                             className={`tribute-post ${homenagem.image_url ? '' : 'no-image'}`}
                                             key={homenagem.id}
-                                            style={{ position: 'relative' }}
+                                            style={{ position: 'relative', cursor: isEditing ? 'pointer' : 'default' }}
+                                            onClick={() => {
+                                                if (isEditing) {
+                                                    setHomenagemToEdit(homenagem);
+                                                    setEditHomenagemName(homenagem.nome);
+                                                    setEditHomenagemMessage(homenagem.mensagem);
+                                                    setIsHomenagemModalOpen(true);
+                                                }
+                                            }}
                                         >
                                             <button
                                                 className="btn-remove-card"
