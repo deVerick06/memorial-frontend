@@ -121,7 +121,7 @@ function MainPage() {
         })
         .catch(error => {
             console.error("Erro ao fazer login:", error);
-            alert(`Erro ao logar: ${error.message}`);
+            toast.error(`Erro ao logar: ${error.message}`);
         })
     };
     const handleLogout = () => {
