@@ -176,12 +176,13 @@ function MainPage() {
         })
         .then(savedHomenagem => {
             setHomenagens(homenagensAtuais => homenagensAtuais.map(h => h.id === savedHomenagem.id ? savedHomenagem : h));
+            toast.success("Homenagem atualizada com sucesso!");
             setIsHomenagemModalOpen(false);
             setHomenagemToEdit(null);
         })
         .catch(error => {
             console.error("Erro ao atualizar homenagem:", error);
-            alert(`Ops, algo deu errado: ${error.message}`);
+            toast.error(`Ops, algo deu errado: ${error.message}`);
         });
     };
     const openLoginModal = () => setIsLoginModalOpen(true);
@@ -251,16 +252,17 @@ function MainPage() {
                 setMemoryCards(currentCards => 
                     currentCards.filter(card => card.id !== cardIdToRemove)
                 );
+                toast.success("Lembrança apagada!");
             } else if (response.status == 401) {
-                alert("Sua sessão expirou. Faça login novamente.");
+                toast.warn("Sua sessão expirou. Faça login novamente.");
                 handleLogout();
             } else {
-                alert("Não foi possivel apagar a lembrança.");
+                toast.error("Não foi possivel apagar a lembrança.");
             }
         })
         .catch(error => {
             console.error("Erro ao deletar a memória:", error);
-            alert("Ops, algo deu errado.");
+            toast.error("Ops, algo deu errado.");
         })
     };
 
@@ -281,14 +283,15 @@ function MainPage() {
         .then(response => {
             if (response.status === 204) {
                 setHomenagens(currentTributes => currentTributes.filter(tribute => tribute.id !== tributeIdToRemove));
+                toast.success("Homenagem apagada!");
             } else {
-                alert("Não foi possível apagar a homenagem.");
+                toast.warn("Não foi possível apagar a homenagem.");
                 console.error("Erro ao deletar:", response.status);
             }
         })
         .catch(error => {
             console.error("Erro ao deletar homenagem:", error);
-            alert("Ops, algo deu errado.")
+            toast.error("Ops, algo deu errado.")
         })
     }
 
@@ -301,7 +304,7 @@ function MainPage() {
         const token = localStorage.getItem('token');
 
         if (!title || !description) {
-            alert("Título e Descrição são obrigatórios.");
+            toast.warn("Título e Descrição são obrigatórios.");
             return;
         }
 
@@ -343,15 +346,17 @@ function MainPage() {
             .then(savedCard => {
                 if (cardToEdit) {
                     setMemoryCards(cardsAtuais => cardsAtuais.map(card => card.id === savedCard.id ? savedCard : card));
+                    toast.success("Lembrança atualizada com sucesso!");
                 } else {
                     setMemoryCards(cardsAtuais => [...cardsAtuais, savedCard]);
+                    toast.success("Lembrança criada com sucesso!");
                 }
                 closeAddMemoryModal();
                 form.reset();
             })
             .catch(error => {
                 console.error("Erro ao salvar memoria:", error);
-                alert(`Ops, algo deu errado: ${error.message}`);
+                toast.error(`Ops, algo deu errado: ${error.message}`);
             });
         };
 
@@ -372,7 +377,7 @@ function MainPage() {
             })
             .catch(error => {
                 console.error("Erro ao fazer upload da imagem:", error);
-                alert("Ops, algo deu errado com o upload da sua foto.");
+                toast.error("Ops, algo deu errado com o upload da sua foto.");
             });
         } else {
             saveMemoryData(null);
@@ -406,13 +411,13 @@ function MainPage() {
             return response.json();
         })
         .then(userCreated => {
-            alert(`Usuário ${userCreated.nome} criado com sucesso! Por favor, faça o login.`);
+            toast.success(`Usuário ${userCreated.nome} criado com sucesso! Por favor, faça o login.`);
             form.reset();
             setShowSignup(false);
         })
         .catch(error => {
             console.error("Erro ao criar usuário:", error);
-            alert(`Erro ao cadastrar: ${error.message}`);
+            toast.error(`Erro ao cadastrar: ${error.message}`);
         });
     };
 
@@ -443,12 +448,12 @@ function MainPage() {
             .then(response => response.json())
             .then(createdHomenagem => {
                 setHomenagens(homenagensAtuais => [createdHomenagem, ...homenagensAtuais]);
-                alert(`Obrigado, ${name}! Sua homenagem foi recebida.`);
+                toast.success(`Obrigado, ${name}! Sua homenagem foi recebida.`);
                 form.reset();
             })
             .catch(error => {
                 console.error("Erro ao criar homenagem:", error);
-                alert("Ops, algo deu errado. Tente novamente.")
+                toast.error("Ops, algo deu errado. Tente novamente.")
             });
         };
         if (file) {
@@ -468,7 +473,7 @@ function MainPage() {
             })
             .catch(error => {
                 console.error("Erro ao fazer upload da imagem:", error);
-                alert("Ops, algo deu errado com o upload da sua foto.");
+                toast.error("Ops, algo deu errado com o upload da sua foto.");
             });
         } else {
             saveTributeData(null);
