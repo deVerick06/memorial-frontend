@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import './MainPage.css'
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
 import { data, Link } from "react-router-dom";
 
 function MainPage() {
@@ -475,6 +477,18 @@ function MainPage() {
 
     return (
         <>
+            <ToastContainer 
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+            />
             <header className="main-header">
                 <h1><Link to="/lembrancas">Lembranças</Link></h1>
                 <div className={`user-profile ${isUserDropdownOpen ? 'open' : ''}`} id="userProfileButton" onClick={isLoggedIn ? toggleUserDropdown : openLoginModal}>
