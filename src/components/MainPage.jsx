@@ -525,12 +525,12 @@ function MainPage() {
                                     className="memory-card"
                                     key={card.id}
                                     onClick={() => {
-                                        if (isEditing) {
+                                        if (isEditing && currentUser && card.owner_id === currentUser.id) {
                                             setCardToEdit(card);
                                             setEditMemoryTitle(card.title);
                                             setEditMemoryDescription(card.description);
                                             openAddMemoryModal();
-                                        } else {
+                                        } else if (!isEditing) {
                                             openMemoryModal(card);
                                         }
                                     }}
@@ -547,12 +547,14 @@ function MainPage() {
                                         </div>
                                     )}
 
-                                    <button
-                                        className="btn-remove-card"
-                                        onClick={(e) => removeCard(e, card.id)}
-                                    >
-                                        &times;
-                                    </button>
+                                    {isEditing && currentUser && card.owner_id === currentUser.id && (
+                                        <button
+                                            className="btn-remove-card"
+                                            onClick={(e) => removeCard(e, card.id)}
+                                        >
+                                            &times;
+                                        </button>
+                                    )}
                                 </div>
                             ))}
                             {isEditing && memoryCards.length < 8 && (
@@ -598,9 +600,12 @@ function MainPage() {
                                         <div
                                             className={`tribute-post ${homenagem.image_url ? '' : 'no-image'}`}
                                             key={homenagem.id}
-                                            style={{ position: 'relative', cursor: isEditing ? 'pointer' : 'default' }}
+                                            style={{ 
+                                                position: 'relative', 
+                                                cursor: (isEditing && currentUser && homenagem.owner_id === currentUser.id) ? 'pointer' : 'default'
+                                            }}
                                             onClick={() => {
-                                                if (isEditing) {
+                                                if (isEditing && currentUser && homenagem.owner_id === currentUser.id) {
                                                     setHomenagemToEdit(homenagem);
                                                     setEditHomenagemName(homenagem.nome);
                                                     setEditHomenagemMessage(homenagem.mensagem);
@@ -608,16 +613,18 @@ function MainPage() {
                                                 }
                                             }}
                                         >
-                                            <button
-                                                className="btn-remove-card"
-                                                onClick={(e) => handleTributeDelete(e, homenagem.id)}
-                                                style={{
-                                                    top: '10px',
-                                                    right: '10px'
-                                                }}
-                                            >
-                                                &times;
-                                            </button>
+                                            {isEditing && currentUser && homenagem.owner_id === currentUser.id && (
+                                                <button
+                                                    className="btn-remove-card"
+                                                    onClick={(e) => handleTributeDelete(e, homenagem.id)}
+                                                    style={{
+                                                        top: '10px',
+                                                        right: '10px'
+                                                    }}
+                                                >
+                                                    &times;
+                                                </button>
+                                            )}
                                             {homenagem.image_url && (
                                                 <img 
                                                     src={homenagem.image_url} 
