@@ -68,8 +68,10 @@ function TributeCard({ tribute, currentUser }) {
                 {tribute.image_url && (
                     <img src={tribute.image_url} alt="Homenagem" className="tribute-image-feed" />
                 )}
-                <p className="tribute-message">"{tribute.mensagem}"</p>
-                <p className="tribute-signature">- {tribute.nome}</p>
+                <div className="tribute-text-content">
+                    <p className="tribute-message">"{tribute.mensagem}"</p>
+                    <p className="tribute-signature">- {tribute.nome}</p>
+                </div>
             </div>
 
             <div className="tribute-actions">
@@ -93,7 +95,7 @@ function TributeCard({ tribute, currentUser }) {
                     <div className="comments-list">
                         {comments.map(c => (
                             <div key={c.id} className="comment-item">
-                                <strong>{c.nome_usuario}: </strong>
+                                <span className="comment-author">{c.nome_usuario}</span>
                                 <span>{c.texto}</span>
                             </div>
                         ))}
