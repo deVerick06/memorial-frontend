@@ -557,14 +557,6 @@ function MainPage() {
                             currentUser={currentUser}
                         />
 
-                        <CommunityTributes 
-                            homenagens={homenagens}
-                            isEditing={isEditing}
-                            currentUser={currentUser}
-                            onSubmit={handleTributeSubmit}
-                            onDeleteClick={handleTributeDelete}
-                            onCardClick={handleHomenagemCardClick}
-                        />
                     </>
                 )}
             </main>
@@ -595,15 +587,6 @@ function MainPage() {
                 onSubmit={handleAddMemorySubmit}
             />
 
-            <EditTributeModal 
-                isOpen={isHomenagemModalOpen}
-                onClose={() => setIsHomenagemModalOpen(false)}
-                name={editHomenagemName}
-                setName={setEditHomenagemName}
-                message={editHomenagemMessage}
-                setMessage={setEditHomenagemMessage}
-                onSubmit={handleHomenagemUpdateSubmit}
-            />
         </>
     );
 }

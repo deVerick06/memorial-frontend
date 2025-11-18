@@ -65,7 +65,7 @@ function Header({
                         display: 'flex', justifyContent: 'center', alignItems: 'center',
                         backgroundColor: '#bbb', fontSize: '18px'
                     }}>
-
+                        <span className="material-icons">person</span>
                     </div>
                 )}
                 <span className="profile-name">

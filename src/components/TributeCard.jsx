@@ -18,7 +18,7 @@ function TributeCard({ tribute, currentUser }) {
         setVelaCount(prev => newStatus ? prev + 1 : prev - 1);
 
         try {
-            await fetch(`http://127.0.0.1:8000/homenagens/${tribute.id}/vela`, {
+            await fetch(`http://127.0.0.1:8000/homenagens/${tribute.id}/like`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${token}` }
             });
@@ -79,14 +79,14 @@ function TributeCard({ tribute, currentUser }) {
                     className={`action-btn vela-btn ${isLit ? 'lit' : ''}`}
                     onClick={handleToggleVela}
                 >
-                    Vela {isLit ? 'Acesa' : 'Acender Vela'} <span>({velaCount})</span>
+                    <span className="material-icons">favorite</span> {isLit ? 'Curtido' : 'Curtir'} <span>({velaCount})</span>
                 </button>
 
                 <button
                     className="action-btn comment-btn"
                     onClick={() => setShowComments(!showComments)}
                 >
-                    Comentários <span>({comments.length})</span>
+                    <span className="material-icons">comment</span> Comentários <span>({comments.length})</span>
                 </button>
             </div>
 
