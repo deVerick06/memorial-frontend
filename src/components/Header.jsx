@@ -12,6 +12,11 @@ function Header({
     return (
         <header className="main-header">
             <h1><Link to="/lembrancas">Lembranças</Link></h1>
+            <div style={{ flex: 1, marginLeft: '40px' }}>
+                <Link to="/homenagens" style={{ color: '#f0f0f0', textDecoration: 'none', fontWeight: 'bold' }}>
+                    Mural da Comunidade
+                </Link>
+            </div>
             
             <div 
                 className={`user-profile ${isDropdownOpen ? 'open' : ''}`} 

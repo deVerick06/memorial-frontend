@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from 'react-dom/client';
 import LandingPage from "./components/LandingPage.jsx";
 import MainPage from "./components/MainPage.jsx";
+import TributesPage from "./components/TributesPage.jsx";
 import './index.css';
 import { createBrowserRouter } from "react-router-dom";
 import { RouterProvider } from "react-router";
@@ -15,6 +16,10 @@ const router = createBrowserRouter ([
     path: '/lembrancas',
     element: <MainPage />,
   },
+  {
+    path: '/homenagens',
+    element: <TributesPage />
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

@@ -1,4 +1,5 @@
-index.css
+@import url('https://fonts.googleapis.com/css2?family=BBH+Sans+Hegarty&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -6,11 +7,11 @@ index.css
 }
 html, body {
     height: 100%;
+    background-color: #105070;
 }
 
 #root {
     min-height: 100vh;
-    background-color: #105070;
     display: flex;
     flex-direction: column;
     font-family: 'Montserrat', sans-serif;
@@ -22,4 +23,9 @@ html, body {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
 }
