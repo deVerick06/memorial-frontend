@@ -1,68 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=BBH+Sans+Hegarty&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-.main-header {
-    padding: 20px 40px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background-color: #105070;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.main-header h1 {
-    font-size: 1.5rem;
-}
-
-.main-header h1 a {
-    color: inherit;
-    text-decoration: none;
-}
-
-.user-profile {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    padding: 5px 10px;
-    border-radius: 25px;
-    transition: background-color 0.3s;
-}
-
-.user-profile:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-.profile-pic {
-    width: 35px;
-    height: 35px;
-    background-color: #b0b0b0;
-    border-radius: 50%;
-    border: 2px solid #f0f0f0;
-}
-
-.profile-name {
-    color: #f0f0f0;
-    font-weight: 700;
-    font-size: 0.95rem;
-}
-
-.dropdown-arrow {
-    border: solid #f0f0f0;
-    border-width: 0 2px 2px 0;
-    display: inline-block;
-    padding: 3px;
-    transform: rotate(45deg);
-    margin-left: 3px;
-    transition: transform 0.3s;
-}
-
-.user-profile.open .dropdown-arrow {
-    transform: rotate(-135deg);
-}
-
 .content {
     padding: 10px 40px 30px 40px;
 }
@@ -659,13 +596,9 @@ body.logged-in .logged-out-item {
 }
 
 @media (max-width: 768px) {
-    .main-header,
     .content {
         padding-left: 20px;
         padding-right: 20px;
-    }
-    .user-profile .profile-name {
-        display: none;
     }
     .tribute-section {
         flex-direction: column;
@@ -694,14 +627,9 @@ body.logged-in .logged-out-item {
 }
 
 @media (max-width: 480px) {
-    .main-header,
     .content {
         padding-left: 10px;
         padding-right: 10px;
-    }
-    .main-header {
-        padding-top: 15px;
-        padding-bottom: 15px;
     }
     .tribute-text h2,
     .gallery-title h2,
