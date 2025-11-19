@@ -192,3 +192,28 @@
     background-color: #ccc;
     cursor: not-allowed;
 }
+
+.floating-add-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #fa83ce; 
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 60px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease-in-out;
+    z-index: 150;
+}
+
+.floating-add-btn:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+}

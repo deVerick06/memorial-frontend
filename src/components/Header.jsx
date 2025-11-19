@@ -69,7 +69,7 @@ function Header({
                     </div>
                 )}
                 <span className="profile-name">
-                    {isLoggedIn ? (currentUser ? currentUser.nome.split(' ')[0] : "...") : "Entrar"}
+                    {isLoggedIn ? (currentUser ? currentUser.nome?.split(' ')[0] : "...") : "Entrar"}
                 </span>
                 <span className="dropdown-arrow"></span>
             </div>
